@@ -28,7 +28,6 @@ describe.only('getNextUniqueId', () => {
 
   it('should use error first callback pattern', (done) => {
     counter.getNextUniqueId((err, id) => {
-      console.log('err:',err, 'id:', id)
       expect(err).to.be.null;
       expect(id).to.exist;
       done();
@@ -135,7 +134,7 @@ describe('todos', () => {
 
   });
 
-  describe('readOne', () => {
+  describe.only('readOne', () => {
     it('should return an error for non-existant todo', (done) => {
       todos.readOne('notAnId', (err, todo) => {
         expect(err).to.exist;
