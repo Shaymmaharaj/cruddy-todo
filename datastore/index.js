@@ -18,12 +18,12 @@ exports.create = (text, callback) => {
   counter.getNextUniqueId((err, id) => {
     //create file path inside dataDir
     //id is file name
-    if(err) {
+    if (err) {
       //console.log('INSIDE GETNEXTUNIQUEID ERROR')
-      callback("Error getNextUniq", id);
-    } else{
-     // console.log('create id: ', id);
-      var filePath = path.join(exports.dataDir,id+'.txt');
+      callback('Error getNextUniq', id);
+    } else {
+      // console.log('create id: ', id);
+      var filePath = path.join(exports.dataDir, id + '.txt');
       //console.log(filePath);
       fs.writeFile(filePath, text, (err) => {
         if (err) {
@@ -31,7 +31,7 @@ exports.create = (text, callback) => {
         } else {
           callback(null, { id, text });
         }
-      })
+      });
     }
   });
 
@@ -55,17 +55,16 @@ exports.readAll = (callback) => {
   fs.readdir(exports.dataDir, function (err, files) {
     //handling error
     if (err) {
-        console.log('Unable to scan directory: ' + err);
-        callback("Error", []);
-    } 
-    else {
+      console.log('Unable to scan directory: ' + err);
+      callback('Error', []);
+    } else {
       //get name of file
       // set an object with id and text to be file name and push
       var arrFile = [];
 
       files.forEach(function (file) {
         var fileName = path.basename(file, '.txt');
-        var tuple = {id:fileName, text:fileName};
+        var tuple = {id: fileName, text: fileName};
         arrFile.push(tuple);
         
       });
@@ -89,8 +88,8 @@ exports.readAll = (callback) => {
         })
         
     });*/
-});
-    //id should id.txt & text is inside 
+  });
+        
 
 
   
