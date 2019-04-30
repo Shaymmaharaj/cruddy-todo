@@ -50,30 +50,29 @@ exports.getNextUniqueId = (callback) => {
       writeCounter(counter, (err, counter) => {
         
         if (err) {
-            //console.log("Error writecounter:" + err);
-            callback("Error @ writecounter:" + err, 0);
-          } else {
-            //console.log("write count updated to ", counter);
-            callback(null, zeroPaddedNumber(counter));
+          //console.log("Error writecounter:" + err);
+          callback('Error @ writecounter:' + err, 0);
+        } else {
+          //console.log("write count updated to ", counter);
+          callback(null, zeroPaddedNumber(counter));
             
-          }
-        })
-        // return zeroPaddedNumber(data);
+        }
+      });
         
     } else {
       //console.log("Read counter data:" + data);
       counter = data + 1;
       writeCounter(counter, (err, writeCounterData) => {
         //console.log("Write counter data:", writeCounterData);
-        if(err){
-         // console.log("Error writecounter:" + err);
-          callback("Error @ writecounter:" + err, 0);
+        if (err) {
+          // console.log("Error writecounter:" + err);
+          callback('Error @ writecounter:' + err, 0);
         } else {
           //console.log("write count updated to ", counter);
           callback(null, writeCounterData);
           
         }
-      })
+      });
     }
   });
 
