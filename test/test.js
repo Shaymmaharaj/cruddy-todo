@@ -21,13 +21,14 @@ const cleanTestDatastore = () => {
   );
 };
 
-describe('getNextUniqueId', () => {
+describe.only('getNextUniqueId', () => {
   before(initializeTestFiles);
   beforeEach(initializeTestCounter);
   beforeEach(cleanTestDatastore);
 
   it('should use error first callback pattern', (done) => {
     counter.getNextUniqueId((err, id) => {
+      console.log('err:',err, 'id:', id)
       expect(err).to.be.null;
       expect(id).to.exist;
       done();
@@ -66,10 +67,11 @@ describe('todos', () => {
   beforeEach(initializeTestCounter);
   beforeEach(cleanTestDatastore);
 
-  describe('create', () => {
+  describe.only('create', () => {
     it('should create a new file for each todo', (done) => {
       todos.create('todo1', (err, data) => {
         const todoCount = fs.readdirSync(todos.dataDir).length;
+        
         expect(todoCount).to.equal(1);
         todos.create('todo2', (err, data) => {
           expect(fs.readdirSync(todos.dataDir)).to.have.lengthOf(2);
@@ -106,7 +108,7 @@ describe('todos', () => {
     });
   });
 
-  describe('readAll', () => {
+  describe.only('readAll', () => {
     it('should return an empty array when there are no todos', (done) => {
       todos.readAll((err, todoList) => {
         expect(err).to.be.null;
