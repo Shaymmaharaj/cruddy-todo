@@ -43,13 +43,13 @@ exports.getNextUniqueId = (callback) => {
 //  return zeroPaddedNumber(counter);
   
   //first read file
-  readCounter((err,data) => {
+  readCounter((err, data) => {
     if (err) {
-       // console.log("Error Read counter: " + err);
+      // console.log("Error Read counter: " + err);
 
-        writeCounter(counter, (err, counter) => {
+      writeCounter(counter, (err, counter) => {
         
-          if(err){
+        if (err) {
             //console.log("Error writecounter:" + err);
             callback("Error @ writecounter:" + err, 0);
           } else {
