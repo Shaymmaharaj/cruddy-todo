@@ -61,7 +61,7 @@ describe.only('getNextUniqueId', () => {
 
 });
 
-describe('todos', () => {
+describe.only('todos', () => {
   before(initializeTestFiles);
   beforeEach(initializeTestCounter);
   beforeEach(cleanTestDatastore);
@@ -154,7 +154,7 @@ describe('todos', () => {
     });
   });
 
-  describe('update', () => {
+  describe.only('update', () => {
     beforeEach((done) => {
       todos.create('original todo', done);
     });

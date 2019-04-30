@@ -55,7 +55,7 @@ exports.readAll = (callback) => {
   fs.readdir(exports.dataDir, function (err, files) {
     //handling error
     if (err) {
-      console.log('Unable to scan directory: ' + err);
+      //console.log('Unable to scan directory: ' + err);
       callback('Error', []);
     } else {
       //get name of file
@@ -68,7 +68,7 @@ exports.readAll = (callback) => {
         arrFile.push(tuple);
         
       });
-      console.log(arrFile);
+      //console.log(arrFile);
       callback(null, arrFile);
 
 
@@ -122,13 +122,37 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
+  console.log('export update id:', id);
+  console.log('export update text:', text);
+  
+
+  exports.readOne(id, (err, data) =>{
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      fs.writeFile(exports.dataDir + '/' + id + '.txt', text, (err) => {
+        if (err) {
+          callback(new Error(`No item with id: ${id}`));
+        } else {
+          callback(null, { id, text });
+        }
+      });
+
+    }
+
+  });
+ 
+
+  
+
+
 };
 
 exports.delete = (id, callback) => {
@@ -140,6 +164,13 @@ exports.delete = (id, callback) => {
   } else {
     callback();
   }
+
+  var filePath = exports.dataDir + '/' + id + '.txt';
+  fs.unlinkSync(filePath);
+  /*
+  The asynchronous one is fs.unlink().
+  The synchronous one is fs.unlinkSync().
+  */
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
