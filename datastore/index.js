@@ -106,12 +106,12 @@ exports.readOne = (id, callback) => {
   //   callback(null, { id, text });
   // }
 
-  fs.readFile(exports.dataDir + '/' + id + '.txt', (err , text) => {
+  fs.readFile(exports.dataDir + '/' + id + '.txt', (err, text) => {
     if (err) {
       //callback('error on create file', id);
       callback(new Error(`No item with id: ${id}`));
     } else {
-      callback(null, {id , text: text.toString() });
+      callback(null, {id, text: text.toString() });
       
       
     }
