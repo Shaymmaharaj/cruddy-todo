@@ -15,10 +15,10 @@ var items = {};
 //    the id of the todo item is encoded into its filename -- 
 //    DO NOT STORE AN OBJECT.
 exports.create = (text, callback) => {
-  counter.getNextUniqueId((err,id) => {
-      //create file path inside dataDir
+  counter.getNextUniqueId((err, id) => {
+    //create file path inside dataDir
     //id is file name
-    if(err){
+    if(err) {
       //console.log('INSIDE GETNEXTUNIQUEID ERROR')
       callback("Error getNextUniq", id);
     } else{
@@ -32,7 +32,6 @@ exports.create = (text, callback) => {
           callback(null, { id, text });
         }
       })
-   
     }
   });
 
@@ -62,7 +61,6 @@ exports.readAll = (callback) => {
     else {
       //get name of file
       // set an object with id and text to be file name and push
-      
     }
     //listing all files using forEach
     files.forEach(function (file) {
