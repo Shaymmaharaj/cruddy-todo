@@ -60,16 +60,27 @@ exports.readAll = (callback) => {
     } else {
       //get name of file
       // set an object with id and text to be file name and push
-      var arrFile = [];
+      var arrObjs = [];
 
       files.forEach(function (file) {
-        var fileName = path.basename(file, '.txt');
-        var tuple = {id: fileName, text: fileName};
-        arrFile.push(tuple);
+
+        fs.readFile(exports.dataDir+'/'+file, (err ,text) => {
+          if (err) {
+            callback('error on read file', id);
+          } else {
+            var fileName = path.basename(file, '.txt');
+            var fileTxt = text.toString();
+            var tuple = {id: fileName, text: fileTxt};
+            console.log(tuple);
+            arrObjs.push(tuple);
+
+            //callback(null, { id, text });
+          }
+        })
         
       });
-      //console.log(arrFile);
-      callback(null, arrFile);
+      console.log(arrObjs);
+      callback(null, arrObjs);
 
 
     }
@@ -156,17 +167,24 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  // var item = items[id];
+  // console.log(id);
+  // delete items[id];
+  // if (!item) {
+  //   // report an error if item not found
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback();
+  // }
 
   var filePath = exports.dataDir + '/' + id + '.txt';
-  fs.unlinkSync(filePath);
+  fs.unlink(filePath, (err, data) => {
+    if (err) {
+      callback(err, null)
+    } else {
+      callback(null, data);
+    }
+  })
   /*
   The asynchronous one is fs.unlink().
   The synchronous one is fs.unlinkSync().
