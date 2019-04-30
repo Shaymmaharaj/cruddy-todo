@@ -76,7 +76,7 @@ exports.readAll = (callback) => {
 
             //callback(null, { id, text });
           }
-        })
+        });
         
       });
       console.log(arrObjs);
@@ -180,11 +180,11 @@ exports.delete = (id, callback) => {
   var filePath = exports.dataDir + '/' + id + '.txt';
   fs.unlink(filePath, (err, data) => {
     if (err) {
-      callback(err, null)
+      callback(err, null);
     } else {
       callback(null, data);
     }
-  })
+  });
   /*
   The asynchronous one is fs.unlink().
   The synchronous one is fs.unlinkSync().
