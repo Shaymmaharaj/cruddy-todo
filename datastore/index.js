@@ -45,9 +45,9 @@ exports.create = (text, callback) => {
 //   each todo item is encoded in its filename.
 exports.readAll = (callback) => {
 
-  var data = _.map(items, (text, id) => {
-    return { id, text };
-  });
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
 
 
 
@@ -55,13 +55,26 @@ exports.readAll = (callback) => {
   fs.readdir(exports.dataDir, function (err, files) {
     //handling error
     if (err) {
-        return console.log('Unable to scan directory: ' + err);
+        console.log('Unable to scan directory: ' + err);
         callback("Error", []);
     } 
     else {
       //get name of file
       // set an object with id and text to be file name and push
+      var arrFile = [];
+
+      files.forEach(function (file) {
+        var fileName = path.basename(file, '.txt');
+        var tuple = {id:fileName, text:fileName};
+        arrFile.push(tuple);
+        
+      });
+      console.log(arrFile);
+      callback(null, arrFile);
+
+
     }
+    /*
     //listing all files using forEach
     files.forEach(function (file) {
         // Do whatever you want to do with the file
@@ -75,7 +88,7 @@ exports.readAll = (callback) => {
           }
         })
         
-    });
+    });*/
 });
     //id should id.txt & text is inside 
 
@@ -83,7 +96,7 @@ exports.readAll = (callback) => {
   
 
   
-  callback(null, data);
+  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
