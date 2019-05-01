@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
+var Promise = require('bluebird');
 
 
 var items = {};
@@ -26,7 +27,7 @@ exports.create = (text, callback) => {
       var filePath = path.join(exports.dataDir, id + '.txt');
       //console.log(filePath);
       fs.writeFile(filePath, text, (err) => {
-        if (err) {
+        if (err) {ss
           callback('error on create file', id);
         } else {
           callback(null, { id, text });
@@ -38,11 +39,7 @@ exports.create = (text, callback) => {
 
 };
 
-// Next, refactor the readAll function by returning an array of 
-// todos to client app whenever a GET request to the collection 
-// route occurs. To do this, you will need to read the dataDir
-//  directory and build a list of files. Remember, the id of
-//   each todo item is encoded in its filename.
+
 exports.readAll = (callback) => {
 
   // var data = _.map(items, (text, id) => {
@@ -58,47 +55,47 @@ exports.readAll = (callback) => {
       //console.log('Unable to scan directory: ' + err);
       callback('Error', []);
     } else {
-      //get name of file
-      // set an object with id and text to be file name and push
-      var arrObjs = [];
-
-      files.forEach(function (file) {
-
-        fs.readFile(exports.dataDir+'/'+file, (err ,text) => {
-          if (err) {
-            callback('error on read file', id);
-          } else {
-            var fileName = path.basename(file, '.txt');
-            var fileTxt = text.toString();
-            var tuple = {id: fileName, text: fileTxt};
-            console.log(tuple);
-            arrObjs.push(tuple);
-
-            //callback(null, { id, text });
-          }
-        });
+  
         
-      });
-      console.log(arrObjs);
-      callback(null, arrObjs);
+      
+      var readFileAsync = function (filePath) {
+        console.log(filePath);
+        return new Promise(function (resolve, reject) {
+          fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              var fileName = path.basename(filePath, '.txt');
+             
+              var tuple = {id: fileName, text: data};
+             console.log(tuple);
+       
+              resolve(tuple);
+            }
+          });
+        });
+      }
+
+      var promises = [];
+      files.forEach(function (file) {
+      var filePath = exports.dataDir+'/'+file;
+      promises.push(readFileAsync(filePath));
+
+    
+    });
+
+      
+      Promise.all(promises).then(function (promisesData) {
+      
+       console.log('Data from promiseALl:' +promisesData);
+       callback(null, promisesData);
+       });
+       
+    
 
 
     }
-    /*
-    //listing all files using forEach
-    files.forEach(function (file) {
-        // Do whatever you want to do with the file
-        console.log("Inside files for each", file);
-        fs.readFile(exports.dataDir+'/'+file, (err ,text) => {
-          if (err) {
-            //callback('error on create file', id);
-          } else {
-            console.log(text.toString());
-            //callback(null, { id, text });
-          }
-        })
-        
-    });*/
+ 
   });
         
 
@@ -110,12 +107,7 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
+
 
   fs.readFile(exports.dataDir + '/' + id + '.txt', (err, text) => {
     if (err) {
@@ -133,17 +125,9 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  // var item = items[id];
-  // if (!item) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   items[id] = text;
-  //   callback(null, { id, text });
-  // }
-  console.log('export update id:', id);
-  console.log('export update text:', text);
-  
 
+ 
+  
   exports.readOne(id, (err, data) =>{
     if (err) {
       callback(new Error(`No item with id: ${id}`));
@@ -167,15 +151,7 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
-  // var item = items[id];
-  // console.log(id);
-  // delete items[id];
-  // if (!item) {
-  //   // report an error if item not found
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback();
-  // }
+
 
   var filePath = exports.dataDir + '/' + id + '.txt';
   fs.unlink(filePath, (err, data) => {
@@ -185,10 +161,7 @@ exports.delete = (id, callback) => {
       callback(null, data);
     }
   });
-  /*
-  The asynchronous one is fs.unlink().
-  The synchronous one is fs.unlinkSync().
-  */
+
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
