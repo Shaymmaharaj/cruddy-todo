@@ -27,7 +27,7 @@ exports.create = (text, callback) => {
       var filePath = path.join(exports.dataDir, id + '.txt');
       //console.log(filePath);
       fs.writeFile(filePath, text, (err) => {
-        if (err) {ss
+        if (err) {
           callback('error on create file', id);
         } else {
           callback(null, { id, text });
@@ -68,28 +68,27 @@ exports.readAll = (callback) => {
               var fileName = path.basename(filePath, '.txt');
              
               var tuple = {id: fileName, text: data};
-             console.log(tuple);
+             
        
               resolve(tuple);
             }
           });
         });
-      }
+      };
 
       var promises = [];
       files.forEach(function (file) {
-      var filePath = exports.dataDir+'/'+file;
-      promises.push(readFileAsync(filePath));
+        var filePath = exports.dataDir + '/' + file;
+        promises.push(readFileAsync(filePath));
 
     
-    });
+      });
 
       
       Promise.all(promises).then(function (promisesData) {
       
-       console.log('Data from promiseALl:' +promisesData);
-       callback(null, promisesData);
-       });
+        callback(null, promisesData);
+      });
        
     
 
